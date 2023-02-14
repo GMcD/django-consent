@@ -157,7 +157,8 @@ class UserConsent(models.Model):
             self.save()
 
     def __str__(self):
-        return "{} agrees to {}".format(self.email, self.source.source_name)
+        status = "has consented to" if self.is_valid() else "has withdrawn consent from"
+        return f"{self.email} {status} {self.source.source_name} for notifications by email."
 
     @classmethod
     def capture_email_consent(cls, source, email, require_confirmation=False):
@@ -242,6 +243,10 @@ class UserConsent(models.Model):
     @property
     def confirm_token(self):
         return utils.get_consent_token(self, salt=consent_settings.CONFIRM_SALT)
+
+    @property
+    def unsubscribe_token(self):
+        return utils.get_consent_token(self, salt=consent_settings.UNSUBSCRIBE_SALT)
 
 
 class EmailCampaign(models.Model):

@@ -1,3 +1,6 @@
+# venv
+.venv*/
+
 # Demo project
 demo/*.sqlite3
 
